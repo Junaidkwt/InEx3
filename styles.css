@@ -1,0 +1,94 @@
+// Exchange rates relative to INR (INR as base currency)
+const exchangeRates = {
+    "INR": 1,
+    "KWD": 250.42
+};
+
+// Initialize incomes and expenses from LocalStorage
+let incomes = JSON.parse(localStorage.getItem('incomes')) || [];
+let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
+
+// Add Income Event
+document.getElementById('income-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const description = document.getElementById('income-description').value;
+    const amount = parseFloat(document.getElementById('income-amount').value);
+    const currency = document.getElementById('income-currency').value;
+
+    if (description && amount && currency) {
+        incomes.push({ description, amount, currency });
+        updateUI();
+        saveToLocalStorage();
+        clearForm('income-form');
+    }
+});
+
+// Add Expense Event
+document.getElementById('expense-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const description = document.getElementById('expense-description').value;
+    const amount = parseFloat(document.getElementById('expense-amount').value);
+    const currency = document.getElementById('expense-currency').value;
+
+    if (description && amount && currency) {
+        expenses.push({ description, amount, currency });
+        updateUI();
+        saveToLocalStorage();
+        clearForm('expense-form');
+    }
+});
+
+// Convert amounts to INR based on currency
+function convertToINR(amount, currency) {
+    return amount * exchangeRates[currency];
+}
+
+// Update UI (Balance, Income List, Expense List)
+function updateUI() {
+    const incomeList = document.getElementById('income-items');
+    const expenseList = document.getElementById('expense-items');
+    const balanceDiv = document.getElementById('balance');
+
+    // Clear existing items
+    incomeList.innerHTML = '';
+    expenseList.innerHTML = '';
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    // Add incomes to list
+    incomes.forEach(income => {
+        const convertedAmount = convertToINR(income.amount, income.currency);
+        const li = document.createElement('li');
+        li.textContent = `${income.description}: ${income.amount} ${income.currency} (≈ ₹${convertedAmount.toFixed(2)})`;
+        incomeList.appendChild(li);
+        totalIncome += convertedAmount;
+    });
+
+    // Add expenses to list
+    expenses.forEach(expense => {
+        const convertedAmount = convertToINR(expense.amount, expense.currency);
+        const li = document.createElement('li');
+        li.textContent = `${expense.description}: ${expense.amount} ${expense.currency} (≈ ₹${convertedAmount.toFixed(2)})`;
+        expenseList.appendChild(li);
+        totalExpense += convertedAmount;
+    });
+
+    // Update balance
+    const balance = totalIncome - totalExpense;
+    balanceDiv.textContent = `Balance: ₹${balance.toFixed(2)}`;
+}
+
+// Save incomes and expenses to LocalStorage
+function saveToLocalStorage() {
+    localStorage.setItem('incomes', JSON.stringify(incomes));
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+}
+
+// Clear form inputs
+function clearForm(formId) {
+    document.getElementById(formId).reset();
+}
+
+// Update UI on page load
+updateUI();
