@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income & Expense Manager</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Personal Income & Expense Manager</h1>
+
+        <section id="income-section">
+            <h2>Add Income</h2>
+            <form id="income-form">
+                <input type="text" id="income-description" placeholder="Income Description" required>
+                <input type="number" id="income-amount" placeholder="Amount" required>
+                <select id="income-currency">
+                    <option value="INR">INR</option>
+                    <option value="KWD">KWD</option>
+                </select>
+                <button type="submit">Add Income</button>
+            </form>
+        </section>
+
+        <section id="expense-section">
+            <h2>Add Expense</h2>
+            <form id="expense-form">
+                <input type="text" id="expense-description" placeholder="Expense Description" required>
+                <input type="number" id="expense-amount" placeholder="Amount" required>
+                <select id="expense-currency">
+                    <option value="INR">INR</option>
+                    <option value="KWD">KWD</option>
+                </select>
+                <button type="submit">Add Expense</button>
+            </form>
+        </section>
+
+        <section id="summary-section">
+            <h2>Summary</h2>
+            <div id="balance">Balance: ₹0</div>
+            <div id="income-list">
+                <h3>Incomes</h3>
+                <ul id="income-items"></ul>
+            </div>
+            <div id="expense-list">
+                <h3>Expenses</h3>
+                <ul id="expense-items"></ul>
+            </div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
